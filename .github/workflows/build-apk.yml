@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
@@ -20,20 +20,19 @@ jobs:
     - name: Install Buildozer and dependencies
       run: |
         sudo apt update
-        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+        # پکیج مشکل‌ساز libtinfo5 از این لیست حذف شد
+        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
         pip install --upgrade pip
         pip install buildozer cython==0.29.36 flet
 
     - name: Initialize Buildozer Spec
       run: |
-        # ساخت فایل تنظیمات اولیه اگر وجود نداشته باشد
         if [ ! -f buildozer.spec ]; then
           flet pack main.py --init
         fi
 
     - name: Build APK with Buildozer
       run: |
-        # ساخت فایل APK
         buildozer -v android debug
 
     - name: Upload APK Artifact
