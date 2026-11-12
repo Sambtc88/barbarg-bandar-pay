@@ -20,15 +20,28 @@ jobs:
     - name: Install Buildozer and dependencies
       run: |
         sudo apt update
-        # پکیج مشکل‌ساز libtinfo5 از این لیست حذف شد
         sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
         pip install --upgrade pip
         pip install buildozer cython==0.29.36 flet
 
-    - name: Initialize Buildozer Spec
+    - name: Create buildozer.spec
       run: |
         if [ ! -f buildozer.spec ]; then
-          flet pack main.py --init
+          cat << 'EOF' > buildozer.spec
+          [app]
+          title = Barbarg Bandar
+          package.name = barbargbandar
+          package.domain = org.barbarg
+          source.include_exts = py,png,jpg,kv,atlas
+          source.dir = .
+          version = 1.0
+          requirements = python3,flet
+          orientation = portrait
+          fullscreen = 0
+          android.permissions = INTERNET
+          android.api = 33
+          android.minapi = 21
+          EOF
         fi
 
     - name: Build APK with Buildozer
