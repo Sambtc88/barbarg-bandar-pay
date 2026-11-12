@@ -1,39 +1,38 @@
-name: Build Flet APK
+name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Install Buildozer and dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
-        pip install --upgrade pip
-        pip install buildozer cython==0.29.36 flet
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: 'stable'
 
-    - name: Force Update buildozer.spec
-      run: |
-        printf "[app]\ntitle = Barbarg Bandar\npackage.name = barbargbandar\npackage.domain = org.barbarg\nsource.include_exts = py,png,jpg,kv,atlas\nsource.dir = .\nversion = 1.0\nrequirements = python3,flet\norientation = portrait\nfullscreen = 0\nandroid.permissions = INTERNET\nandroid.api = 33\nandroid.minapi = 21\nandroid.accept_sdk_license = True\n" > buildozer.spec
+      - name: Install Flet
+        run: |
+          python -m pip install --upgrade pip
+          pip install "flet==0.25.2" httpx==0.27.0
 
-    - name: Build APK with Buildozer
-      run: |
-        buildozer -v android debug
+      - name: Build APK with Flet
+        run: |
+          yes | flet build apk -v
 
-    - name: Upload APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Barbarg-Bandar-APK
-        path: bin/*.apk
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BarGo-APK
+          path: build/apk/*.apk
