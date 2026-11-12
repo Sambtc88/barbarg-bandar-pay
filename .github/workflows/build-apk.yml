@@ -24,11 +24,9 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython==0.29.36 flet
 
-    - name: Create buildozer.spec
+    - name: Force Update buildozer.spec
       run: |
-        if [ ! -f buildozer.spec ]; then
-          printf "[app]\ntitle = Barbarg Bandar\npackage.name = barbargbandar\npackage.domain = org.barbarg\nsource.include_exts = py,png,jpg,kv,atlas\nsource.dir = .\nversion = 1.0\nrequirements = python3,flet\norientation = portrait\nfullscreen = 0\nandroid.permissions = INTERNET\nandroid.api = 33\nandroid.minapi = 21\n" > buildozer.spec
-        fi
+        printf "[app]\ntitle = Barbarg Bandar\npackage.name = barbargbandar\npackage.domain = org.barbarg\nsource.include_exts = py,png,jpg,kv,atlas\nsource.dir = .\nversion = 1.0\nrequirements = python3,flet\norientation = portrait\nfullscreen = 0\nandroid.permissions = INTERNET\nandroid.api = 33\nandroid.minapi = 21\nandroid.accept_sdk_license = True\n" > buildozer.spec
 
     - name: Build APK with Buildozer
       run: |
