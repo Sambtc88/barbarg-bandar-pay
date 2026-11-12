@@ -27,21 +27,7 @@ jobs:
     - name: Create buildozer.spec
       run: |
         if [ ! -f buildozer.spec ]; then
-          cat << 'EOF' > buildozer.spec
-          [app]
-          title = Barbarg Bandar
-          package.name = barbargbandar
-          package.domain = org.barbarg
-          source.include_exts = py,png,jpg,kv,atlas
-          source.dir = .
-          version = 1.0
-          requirements = python3,flet
-          orientation = portrait
-          fullscreen = 0
-          android.permissions = INTERNET
-          android.api = 33
-          android.minapi = 21
-          EOF
+          printf "[app]\ntitle = Barbarg Bandar\npackage.name = barbargbandar\npackage.domain = org.barbarg\nsource.include_exts = py,png,jpg,kv,atlas\nsource.dir = .\nversion = 1.0\nrequirements = python3,flet\norientation = portrait\nfullscreen = 0\nandroid.permissions = INTERNET\nandroid.api = 33\nandroid.minapi = 21\n" > buildozer.spec
         fi
 
     - name: Build APK with Buildozer
